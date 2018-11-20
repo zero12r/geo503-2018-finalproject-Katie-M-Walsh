@@ -9,10 +9,10 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Your name here" />
+<meta name="author" content="Kaitlin Walsh" />
 
 
-<title>I have the best titles</title>
+<title>Establishing Floodzones and Potential Constructed Wetlands for Wastewater Management</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -303,72 +303,105 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">I have the best titles</h1>
-<h3 class="subtitle"><em>Subtitle here if desired</em></h3>
-<h4 class="author"><em>Your name here</em></h4>
+<h1 class="title toc-ignore">Establishing Floodzones and Potential Constructed Wetlands for Wastewater Management</h1>
+<h3 class="subtitle"><em>A study of Seneca Nation</em></h3>
+<h4 class="author"><em>Kaitlin Walsh</em></h4>
 
 </div>
 
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>My really awesome and complete introduction will go here.</p>
-<blockquote>
-<p>I know words. I have the best words. ~ Donald Trump</p>
-</blockquote>
+<p>Cattauragus Creek floods causing social, financial, and environmental issues; to mitigate this, first the areas which are most likely to flood must be found.</p>
+<div class="figure">
+<img src="https://gardenwarriorsgoodseeds.files.wordpress.com/2015/01/mapphoto.jpg" />
+
+</div>
+<p>This is the study area: Cattauragus Creek. It flows into Lake Erie and affects many stakeholders along the Creek Coast, and the coast of Lake Erie. Stakeholders include the Seneca Nation, the Army Corps of Engineers, citizens and business owners of Sunset Bay, and local, State, and Federal Government.</p>
 </div>
 <div id="materials-and-methods" class="section level1">
 <h1>Materials and methods</h1>
-<p>Narrative and most code will go here. Describe what you are doing and show how to do it (with code).</p>
-<p>You can do bullets like this:</p>
 <ul>
-<li>The first most important thing</li>
-<li>The second most important thing</li>
-<li>The third most important thing</li>
+<li>Shapefile of Seneca Nation</li>
+<li>Filter elevation shapefiles</li>
+<li>Filtering elevations</li>
+<li>Filtering for precipitation</li>
+<li>Establishing Flood Zones in Seneca Nation</li>
+<li>Filtering by soil type</li>
+<li>Filtering by vegetation type</li>
+<li>Filtering by temperature/ date ( if ground is frozen, can’t establish constructed wastelands)</li>
+<li>Creating possible constructed wetland areas by selection/joining of filtered topics</li>
 </ul>
-<p>You can do numbers like this:</p>
-<ol style="list-style-type: decimal">
-<li>The first most important thing</li>
-<li>The second most important thing</li>
-<li>The third most important thing</li>
-</ol>
-<p>See <a href="http://rmarkdown.rstudio.com/" class="uri">http://rmarkdown.rstudio.com/</a> for all the amazing things you can do.</p>
-<p>Here’s my first code chunk.</p>
-<pre class="r"><code>1+2</code></pre>
-<pre><code>## [1] 3</code></pre>
-<p>Load any required packages in a code chunk (you may need to install some packages):</p>
-<pre class="r"><code>library(dplyr)
+<pre class="r"><code>library(raster)
+library(sp)
+library(rgdal)
 library(ggplot2)
+library(ggmap)
+library(dplyr)
+library(tidyr)
 library(maps)
-library(spocc)
-knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling</code></pre>
-<p>We are going to use the <code>occ()</code> function to download <em>occurrence</em> records for the American robin (<em>Turdus migratorius</em>) from the <a href="gbif.org">Global Biodiversity Information Facility</a>.</p>
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Turdus-migratorius-002.jpg" alt="alt text" width="200"> <small><small><small>Licensed under CC BY-SA 3.0 via <a href="https://commons.wikimedia.org/wiki/File:Turdus-migratorius-002.jpg#/media/File:Turdus-migratorius-002.jpg">Wikimedia Commons</a></small></small></small></p>
-<pre class="r"><code>## define which species to query
-sp=&#39;Turdus migratorius&#39;
+library(scales)
+library(sf)
+library(rnoaa)
+#install.packages(&quot;climdex.pcic&quot;)
+#install.packages(&quot;zoo&quot;)
+#install.packages(&quot;reshape2&quot;)
+#install.packages(&quot;leaflet&quot;)
+library(leaflet)
 
-## run the query and convert to data.frame()
-d = occ(query=sp, from=&#39;ebird&#39;,limit = 100) %&gt;% occ2df()</code></pre>
-<p>This can take a few seconds.</p>
-<pre class="r"><code># Load coastline
-map=map_data(&quot;world&quot;)
+#install.packages(&quot;DT&quot;)
+#install.packages(&quot;widgetframe&quot;)
+library(DT)
+library(widgetframe)
+library(climdex.pcic)
+library(zoo)
+library(reshape2)
+library(broom)
+#install.packages(&quot;FedData&quot;)
+library(FedData)
 
-ggplot(d,aes(x=longitude,y=latitude))+
-  geom_polygon(aes(x=long,y=lat,group=group),data=map)+
-  geom_point(col=&quot;red&quot;)+
-  coord_equal()</code></pre>
-<div class="figure">
-<img src="index_files/figure-html/unnamed-chunk-4-1.png" alt="Map illustrating the known occurrence locations" width="576" />
-<p class="caption">
-Map illustrating the known occurrence locations
-</p>
-</div>
-</div>
-<div id="results" class="section level1">
-<h1>Results</h1>
-<p>Show tables, plots, etc. and describe them.</p>
-<pre class="r"><code>hist(d$latitude)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+
+knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling
+
+SNI &lt;- st_read(&quot;Data/CattaraugusSNI.shp&quot;)</code></pre>
+<pre><code>## Reading layer `CattaraugusSNI&#39; from data source `C:\Users\ktwal\OneDrive\Documents\Fall 2018\R\RDataScience_Project\Data\CattaraugusSNI.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 1 feature and 10 fields
+## geometry type:  POLYGON
+## dimension:      XY
+## bbox:           xmin: 160335.5 ymin: 4709341 xmax: 176229.2 ymax: 4723081
+## epsg (SRID):    26918
+## proj4string:    +proj=utm +zone=18 +datum=NAD83 +units=m +no_defs</code></pre>
+<pre class="r"><code>#SNI.trans &lt;- st_transform(SNI, st_crs(4326))
+plot(SNI, max.plot = 10)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<pre class="r"><code>library(DataScienceData)
+lulcf=system.file(&quot;extdata&quot;, 
+                &quot;appeears/MCD12Q1.051_aid0001.nc&quot;, 
+                package = &quot;DataScienceData&quot;)
+lulcf</code></pre>
+<pre><code>## [1] &quot;C:/Users/ktwal/OneDrive/Documents/R/win-library/3.5/DataScienceData/extdata/appeears/MCD12Q1.051_aid0001.nc&quot;</code></pre>
+<pre class="r"><code>lulc=stack(lulcf,varname=&quot;Land_Cover_Type_1&quot;)</code></pre>
+<pre><code>## [1] &quot;&gt;&gt;&gt;&gt; WARNING &lt;&lt;&lt;  attribute latitude_of_projection_origin is an 8-byte value, but R&quot;
+## [1] &quot;does not support this data type. I am returning a double precision&quot;
+## [1] &quot;floating point, but you must be aware that this could lose precision!&quot;
+## [1] &quot;&gt;&gt;&gt;&gt; WARNING &lt;&lt;&lt;  attribute longitude_of_central_meridian is an 8-byte value, but R&quot;
+## [1] &quot;does not support this data type. I am returning a double precision&quot;
+## [1] &quot;floating point, but you must be aware that this could lose precision!&quot;
+## [1] &quot;&gt;&gt;&gt;&gt; WARNING &lt;&lt;&lt;  attribute longitude_of_projection_origin is an 8-byte value, but R&quot;
+## [1] &quot;does not support this data type. I am returning a double precision&quot;
+## [1] &quot;floating point, but you must be aware that this could lose precision!&quot;
+## [1] &quot;&gt;&gt;&gt;&gt; WARNING &lt;&lt;&lt;  attribute straight_vertical_longitude_from_pole is an 8-byte value, but R&quot;
+## [1] &quot;does not support this data type. I am returning a double precision&quot;
+## [1] &quot;floating point, but you must be aware that this could lose precision!&quot;
+## [1] &quot;&gt;&gt;&gt;&gt; WARNING &lt;&lt;&lt;  attribute false_easting is an 8-byte value, but R&quot;
+## [1] &quot;does not support this data type. I am returning a double precision&quot;
+## [1] &quot;floating point, but you must be aware that this could lose precision!&quot;
+## [1] &quot;&gt;&gt;&gt;&gt; WARNING &lt;&lt;&lt;  attribute false_northing is an 8-byte value, but R&quot;
+## [1] &quot;does not support this data type. I am returning a double precision&quot;
+## [1] &quot;floating point, but you must be aware that this could lose precision!&quot;</code></pre>
+<pre class="r"><code>plot(lulc)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code># Results</code></pre>
 </div>
 <div id="conclusions" class="section level1">
 <h1>Conclusions</h1>
