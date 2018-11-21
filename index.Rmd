@@ -4,14 +4,14 @@ author: Kaitlin Walsh
 subtitle: A study of Seneca Nation
 ---
 
-# Introduction
+# Introduction 
 Cattauragus Creek floods causing social, financial, and environmental issues; to mitigate this, first the areas which are most likely to flood must be found. DEM's, precipitation, soils, vegetation, temperature, and LULC will be obtianed from NOAA and FedData, then overlaid on the Seneca Nation .shp in order to identify results of where a Constructed Wetland would be suitable.  
 This is the study area: Cattauragus Creek.  It flows into Lake Erie and affects many stakeholders along the Creek Coast, and the coast of Lake Erie.  Stakeholders include the Seneca Nation, the Army Corps of Engineers, citizens and business owners of Sunset Bay, and local, State, and Federal Government.
 ![](https://gardenwarriorsgoodseeds.files.wordpress.com/2015/01/mapphoto.jpg)
 
 
 
-# Materials and methods
+# Materials and methods 
 
 * Shapefile of Seneca Nation
 * Filter elevation shapefiles
@@ -60,7 +60,7 @@ library(FedData)
 knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling
 
 SNI <- st_read("Data/CattaraugusSNI.shp")
-st_transform(st_geometry(SNI, st_crs(CRS=)))
+st_transform(st_geometry(SNI, st_crs(CRS=))) 
 #SNI.trans <- st_transform(SNI, st_crs(4326))
 class(SNI)
 SNI_sp = as(SNI, Class = "Spatial")
